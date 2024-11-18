@@ -12,6 +12,8 @@ const totalTracks = document.getElementById('total')
 const previousTrack = document.getElementById('back')
 const playPause = document.getElementById('playPause')
 const nextTrack = document.getElementById('forward')
+const volumeControl = document.getElementById('volumeAudio')
+const progressControl = document.getElementById('progress')
 const svgPlay = ` <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
               class="icon icon-tabler icons-tabler-filled icon-tabler-player-play">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -24,6 +26,11 @@ const audio = new Audio()
 let actual = 0
 let pause = true
 
+function updateProgress() {
+  const progressValue = (audio.currentTime / audio.duration) * 100
+  progressControl.value = progressValue
+}
+
 function init() {
   totalTracks.innerText = data.length
   currentTrack.innerText = actual + 1
@@ -34,6 +41,7 @@ function init() {
   trackAlbumName.innerText = data[actual].track_album
 
   audio.src = data[actual].track_direction
+  audio.volume = volumeControl.value
   playPause.innerHTML = svgPlay
 }
 init()
@@ -69,3 +77,19 @@ previousTrack.addEventListener('click', () => {
   }
   init()
 })
+
+volumeControl.addEventListener('input', () => {
+  audio.volume = volumeControl.value
+})
+
+progressControl.addEventListener('input', () => {
+  const newTime = (progressControl.value / 100) * audio.duration
+  audio.currentTime = newTime
+})
+
+audio.addEventListener('timeupdate', updateProgress)
+
+if (audio.ended) {
+  playPause.innerHTML = ''
+  playPause.innerHTML = svgPlay
+}

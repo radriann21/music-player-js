@@ -71,3 +71,19 @@ div.controls {
   }
 
 }
+
+div.audio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+div.audio-controls {
+  margin-top: 1rem;
+
+  & span {
+    font-weight: 800;
+    margin-right: .5rem;
+  }
+}
